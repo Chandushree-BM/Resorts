@@ -16,12 +16,11 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", {
+      await axios.post("http://localhost:5000/api/auth/register", {
         username,
         email,
         password,
       });
-
       alert("Signup Successful ✅");
       window.location.href = "/signin";
     } catch (err) {
@@ -32,79 +31,81 @@ export default function Signup() {
   };
 
   return (
-    <div className="flex h-screen w-full bg-gray-100">
-      <div className="w-full hidden md:inline-block">
-        <img
-          className="h-full w-full object-cover"
-          src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/leftSideImage.png"
-          alt="signup bg"
-        />
-      </div>
+    <div
+      className="relative flex items-center justify-center h-screen w-full bg-cover bg-center"
+      style={{
+        backgroundImage: "url('./signup.jpg')", // Resort image
+      }}
+    >
+      {/* Soft light overlay for better contrast */}
+      <div className="absolute inset-0 bg-white/40 "></div>
 
-      <div className="w-full flex flex-col items-center justify-center">
+      {/* Outer animated gradient border */}
+      <div className="relative z-10 p-[2px] rounded-2xl bg-gradient-to-r from-amber-200 via-rose-100 to-emerald-200 animate-[borderFlow_10s_linear_infinite]">
         <form
           onSubmit={handleSignup}
-          className="md:w-96 w-80 flex flex-col items-center justify-center bg-white p-8 rounded-2xl shadow-lg"
+          className="relative z-10 md:w-96 w-80 flex flex-col items-center justify-center bg-white/70 backdrop-blur-md p-8 rounded-2xl shadow-xl"
         >
-          <h2 className="text-3xl text-gray-900 font-semibold">Sign Up</h2>
+          <h2 className="text-3xl font-semibold text-slate-800">Sign Up</h2>
+          <p className="text-sm text-slate-500 mt-2">
+            Create your account to continue
+          </p>
 
           {/* Google Button */}
           <button
             type="button"
-            className="w-full mt-6 bg-white border border-gray-300 flex items-center justify-center h-12 rounded-full hover:bg-gray-100 transition-all"
+            className="w-full mt-8 bg-gradient-to-r from-amber-100 to-rose-100 border border-white/60 flex items-center justify-center h-12 rounded-full hover:scale-105 transition-all"
           >
             <img
               src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/googleLogo.svg"
               className="mr-2"
               alt="google"
             />
-            <span className="text-sm text-gray-700">Sign up with Google</span>
+            <span className="text-sm text-slate-700">Sign up with Google</span>
           </button>
 
           {/* Divider */}
-          <div className="flex items-center gap-4 w-full my-5">
-            <div className="w-full h-px bg-gray-300"></div>
-            <p className="text-sm text-gray-500 whitespace-nowrap">
-              or sign up with email
-            </p>
-            <div className="w-full h-px bg-gray-300"></div>
+          <div className="flex items-center gap-4 w-full my-5 text-slate-500">
+            <div className="w-full h-px bg-slate-300"></div>
+            <p className="text-sm whitespace-nowrap">or sign up with email</p>
+            <div className="w-full h-px bg-slate-300"></div>
           </div>
 
           {/* Username */}
-          <div className="flex items-center w-full border border-gray-300 h-12 rounded-full pl-6 gap-2">
-            <FaUserAlt className="text-gray-500 text-sm" />
+          <div className="flex items-center w-full border border-slate-300 h-12 rounded-full pl-6 gap-2 focus-within:border-amber-300 bg-white/50 transition-all">
+            <FaUserAlt className="text-slate-500 text-sm" />
             <input
               type="text"
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="bg-transparent outline-none text-sm w-full"
+              className="bg-transparent text-slate-700 placeholder-slate-400 outline-none text-sm w-full"
               required
             />
           </div>
 
           {/* Email */}
-          <div className="flex items-center w-full border border-gray-300 h-12 rounded-full pl-6 gap-2 mt-5">
-            <MdEmail className="text-gray-500 text-base" />
+          <div className="flex items-center w-full border border-slate-300 h-12 rounded-full pl-6 gap-2 mt-5 focus-within:border-amber-300 bg-white/50 transition-all">
+            <MdEmail className="text-slate-500 text-base" />
             <input
               type="email"
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="bg-transparent outline-none text-sm w-full"
+              className="bg-transparent text-slate-700 placeholder-slate-400 outline-none text-sm w-full"
               required
             />
           </div>
 
           {/* Password */}
-          <div className="flex items-center w-full border border-gray-300 h-12 rounded-full pl-6 gap-2 mt-5">
-            <FaLock className="text-gray-500 text-sm" />
+          <div className="flex items-center w-full border border-slate-300 h-12 rounded-full pl-6 gap-2 mt-5 focus-within:border-amber-300 bg-white/50 transition-all">
+            <FaLock className="text-slate-500 text-sm" />
             <input
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="bg-transparent outline-none text-sm w-full"
+              className="bg-transparent text-slate-700 placeholder-slate-400 outline-none text-sm w-full"
               required
             />
           </div>
@@ -113,14 +114,14 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-8 w-full h-11 bg-indigo-500 hover:opacity-90 text-white rounded-full transition-all"
+            className="mt-8 w-full h-11 rounded-full text-white font-semibold bg-gradient-to-r from-amber-400 to-rose-400 hover:from-amber-300 hover:to-rose-300 shadow-lg transition-all"
           >
             {loading ? "Registering..." : "Register"}
           </button>
 
-          <p className="text-gray-500 text-sm mt-4">
+          <p className="text-slate-600 text-sm mt-4">
             Already have an account?{" "}
-            <Link className="text-indigo-500 hover:underline" to="/">
+            <Link className="text-amber-600 hover:underline" to="/">
               Sign in
             </Link>
           </p>

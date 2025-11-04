@@ -21,7 +21,6 @@ export default function Signin() {
       alert("Login Successful ✅");
       localStorage.setItem("token", res.data.token);
       window.location.href = "/";
-
     } catch (error) {
       alert(error.response?.data?.message || "Login failed ❌");
       console.error(error);
@@ -31,81 +30,84 @@ export default function Signin() {
   };
 
   return (
-    <div className="flex h-[700px] w-full">
-      <div className="w-full hidden md:inline-block">
-        <img
-          className="h-full object-cover"
-          src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/leftSideImage.png"
-          alt="leftSideImage"
-        />
-      </div>
+    <div
+      className="relative flex items-center justify-center h-screen w-full bg-cover bg-center"
+      style={{
+        backgroundImage: "url('./signup.jpg')", // resort image background
+      }}
+    >
+      {/* soft white overlay for clarity */}
+      <div className="absolute inset-0 bg-white/40 "></div>
 
-      <div className="w-full flex flex-col items-center justify-center">
+      {/* animated gradient border wrapper */}
+      <div className="relative z-10 p-[2px] rounded-2xl bg-gradient-to-r from-amber-200 via-rose-100 to-emerald-200 animate-[borderFlow_10s_linear_infinite]">
         <form
           onSubmit={handleSignin}
-          className="md:w-96 w-80 flex flex-col items-center justify-center"
+          className="relative z-10 md:w-96 w-80 flex flex-col items-center justify-center bg-white/70 backdrop-blur-md p-8 rounded-2xl shadow-xl"
         >
-          <h2 className="text-4xl text-gray-900 font-medium">Sign in</h2>
-          <p className="text-sm text-gray-500/90 mt-3">
+          <h2 className="text-3xl font-semibold text-slate-800">Sign In</h2>
+          <p className="text-sm text-slate-500 mt-2">
             Welcome back! Please sign in to continue
           </p>
 
-          {/* ✅ Google Login Button */}
+          {/* Google Button */}
           <button
             type="button"
-            className="w-full mt-8 bg-gray-500/10 flex items-center justify-center h-12 rounded-full"
+            className="w-full mt-8 bg-gradient-to-r from-amber-100 to-rose-100 border border-white/60 flex items-center justify-center h-12 rounded-full hover:scale-105 transition-all"
           >
             <img
               src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/googleLogo.svg"
+              className="mr-2"
               alt="googleLogo"
             />
+            <span className="text-sm text-slate-700">Sign in with Google</span>
           </button>
 
-          <div className="flex items-center gap-4 w-full my-5">
-            <div className="w-full h-px bg-gray-300/90"></div>
-            <p className="text-sm text-gray-500/90 whitespace-nowrap">
-              or sign in with email
-            </p>
-            <div className="w-full h-px bg-gray-300/90"></div>
+          {/* Divider */}
+          <div className="flex items-center gap-4 w-full my-5 text-slate-500">
+            <div className="w-full h-px bg-slate-300"></div>
+            <p className="text-sm whitespace-nowrap">or sign in with email</p>
+            <div className="w-full h-px bg-slate-300"></div>
           </div>
 
           {/* Email */}
-          <div className="flex items-center w-full border border-gray-300/60 h-12 rounded-full pl-6 gap-2">
+          <div className="flex items-center w-full border border-slate-300 h-12 rounded-full pl-6 gap-2 bg-white/50 focus-within:border-amber-300 transition-all">
             <input
               type="email"
-              placeholder="Email id"
+              placeholder="Email address"
               value={email}
               autoComplete="email"
               onChange={(e) => setEmail(e.target.value)}
-              className="bg-transparent text-gray-500/80 outline-none text-sm w-full"
+              className="bg-transparent text-slate-700 placeholder-slate-400 outline-none text-sm w-full"
               required
             />
           </div>
 
           {/* Password */}
-          <div className="flex items-center mt-6 w-full border border-gray-300/60 h-12 rounded-full pl-6 gap-2">
+          <div className="flex items-center mt-5 w-full border border-slate-300 h-12 rounded-full pl-6 gap-2 bg-white/50 focus-within:border-amber-300 transition-all">
             <input
               type="password"
               placeholder="Password"
               value={password}
               autoComplete="current-password"
               onChange={(e) => setPassword(e.target.value)}
-              className="bg-transparent text-gray-500/80 outline-none text-sm w-full"
+              className="bg-transparent text-slate-700 placeholder-slate-400 outline-none text-sm w-full"
               required
             />
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
-            className="mt-8 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity"
+            className="mt-8 w-full h-11 rounded-full text-white font-semibold bg-gradient-to-r from-amber-400 to-rose-400 hover:from-amber-300 hover:to-rose-300 shadow-lg transition-all"
           >
             {loading ? "Signing in..." : "Login"}
           </button>
 
-          <p className="text-gray-500/90 text-sm mt-4">
+          <p className="text-slate-600 text-sm mt-4">
             Don’t have an account?{" "}
-            <Link className="text-indigo-400 hover:underline" to="/signup">
+            <Link className="text-amber-600 hover:underline" to="/signup">
               Sign up
             </Link>
           </p>
