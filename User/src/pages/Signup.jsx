@@ -2,6 +2,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 
@@ -118,13 +119,22 @@ export default function Signup() {
           >
             {loading ? "Registering..." : "Register"}
           </button>
-
-          <p className="text-slate-600 text-sm mt-4">
-            Already have an account?{" "}
-            <Link className="text-amber-600 hover:underline" to="/">
-              Sign in
+            <p className="text-sm text-center mt-4 text-white">
+  Already have an account?{" "}
+  <Link to="/signin" className="text-blue-400 hover:text-blue-600 font-medium">
+    Sign in
+  </Link>
+</p>
+<div className="text-center mt-16">
+            <Link
+              to="/"
+              className="inline-block bg-amber-100/20 text-amber-400 border border-white/30 px-8 py-3 rounded-full hover:bg-amber-200/30 transition"
+            >
+              ← Back to Home
             </Link>
-          </p>
+          </div>
+
+          
         </form>
       </div>
     </div>
