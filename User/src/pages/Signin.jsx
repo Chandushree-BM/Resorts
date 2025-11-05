@@ -111,8 +111,18 @@ export default function Signin() {
               Sign up
             </Link>
           </p>
+           <div className="text-center mt-16">
+            <Link
+              to="/"
+              className="inline-block bg-amber-100/20 text-amber-400 border border-white/30 px-8 py-3 rounded-full hover:bg-amber-200/30 transition"
+            >
+              ← Back to Home
+            </Link>
+          </div>
         </form>
+         
       </div>
+    
     </div>
   );
 }
