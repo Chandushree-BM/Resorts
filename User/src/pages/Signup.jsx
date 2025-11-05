@@ -119,7 +119,7 @@ export default function Signup() {
           >
             {loading ? "Registering..." : "Register"}
           </button>
-            <p className="text-sm text-center mt-4 text-white">
+            <p className="text-sm text-center mt-4 text-amber">
   Already have an account?{" "}
   <Link to="/signin" className="text-blue-400 hover:text-blue-600 font-medium">
     Sign in
