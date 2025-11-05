@@ -5,6 +5,9 @@ import Signin from "./pages/Signin";
 import Testimonials from "./pages/Testimonials.jsx";
 import About from "./pages/About";
 import Contact from "./pages/Contact.jsx";
+import Packages from "./pages/Packages";
+import BookingPage from "./pages/BookingPage.jsx";
+import PackageDetails from "./pages/Packagedetails.jsx";
 export default function App() {
   return (
     <Router>
@@ -15,6 +18,10 @@ export default function App() {
         <Route path="/testimonials" element={<Testimonials />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+<Route path="/booking" element={<BookingPage />} />
+        <Route path="/packages" element={<Packages />} />
+        <Route path="/packages/:id" element={<PackageDetails />} /> 
+
       </Routes>
     </Router>
   );
