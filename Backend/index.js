@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 import authRoutes from "./routes/auth.js";
 
-dotenv.config(); // ✅ Load .env first
+dotenv.config(); 
 
 const app = express();
 
@@ -20,9 +20,9 @@ app.use("/api/auth", authRoutes);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("✅ MongoDB connected");
+    console.log("MongoDB connected");
     app.listen(process.env.PORT || 5000, () =>
-      console.log(`🚀 Server running on port ${process.env.PORT || 5000}`)
+      console.log(` Server running on port ${process.env.PORT || 5000}`)
     );
   })
-  .catch((err) => console.error("❌ Database Error: ", err));
+  .catch((err) => console.error("Database Error: ", err));
