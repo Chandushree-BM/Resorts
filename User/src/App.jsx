@@ -16,6 +16,10 @@ export default function App() {
         <Route path="/testimonials" element={<Testimonials />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+<Route path="/booking" element={<BookingPage />} />
+        <Route path="/packages" element={<Packages />} />
+        <Route path="/packages/:id" element={<PackageDetails />} /> 
+
       </Routes>
     </Router>
   );
