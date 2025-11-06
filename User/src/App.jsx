@@ -1,10 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import Landing from "./pages/Landing";
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import Testimonials from "./pages/Testimonials.jsx";
 import About from "./pages/About";
 import Contact from "./pages/Contact.jsx";
+<<<<<<< HEAD
 import Profile from "./pages/Profile";
 
 
@@ -12,6 +14,17 @@ import Profile from "./pages/Profile";
 export default function App() {
   return (
     
+=======
+<<<<<<< HEAD
+import AddReview from "./pages/AddReview.jsx";
+=======
+
+>>>>>>> 1748df4a116702741114635adf2b7809a24931ac
+export default function App() {
+  return (
+    <>
+    <Toaster position="top-center" />
+>>>>>>> 9eb7f07959a8affa24bbe4da891f187d0566a55b
     <Router>
       <Routes>
         <Route path="/" element={<Landing />} />
@@ -21,7 +34,15 @@ export default function App() {
         <Route path="/testimonials" element={<Testimonials />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+<<<<<<< HEAD
+        <Route path="/add-review" element={<AddReview />} />
+=======
+<Route path="/booking" element={<BookingPage />} />
+        <Route path="/packages" element={<Packages />} />
+        <Route path="/packages/:id" element={<PackageDetails />} /> 
+
+>>>>>>> 1748df4a116702741114635adf2b7809a24931ac
       </Routes>
-    </Router>
+    </Router></>
   );
 }

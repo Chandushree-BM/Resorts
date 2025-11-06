@@ -1,66 +1,83 @@
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
+import { useEffect, useState } from "react";
 
 export default function Testimonials() {
-  const testimonials = [
-    {
-      name: "@aarav_meera",
-      location: "Mumbai",
-      image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80",
-      text: "Our anniversary trip was magical! The staff were kind, the food divine, and the ocean view unforgettable.",
-      rating: 5,
-    },
-    {
-      name: "@nikhil_family",
-      location: "Bangalore",
-      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&q=80",
-      text: "Perfect family resort! Kids loved the pool, and we loved the spa. Every moment felt peaceful and luxurious.",
-      rating: 4,
-    },
-    {
-      name: "@riya_travels",
-      location: "Delhi",
-      image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=100&q=80",
-      text: "As a solo traveler, I felt safe, welcome, and pampered. A place I’d return to again and again.",
-      rating: 5,
-    },
-    {
-      name: "@anika_weds",
-      location: "Pune",
-      image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=100&q=80",
-      text: "We hosted our wedding here—it was a dream come true! Elegant décor and breathtaking sunset views.",
-      rating: 5,
-    },
-    {
-      name: "@rohan_business",
-      location: "Hyderabad",
-      image: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=100&q=80",
-      text: "Visited for a business retreat. Great conference facilities, food, and ambience. Truly refreshing!",
-      rating: 4,
-    },
-  ];
+  const [testimonials, setTestimonials] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/reviews")
+      .then(res => res.json())
+      .then(data => setTestimonials(data))
+      .catch(err => console.log(err));
+  }, []);
+
+  // ✅ Logged-in user ID
+  const token = localStorage.getItem("token");
+  let loggedInUserId = null;
+  if (token) {
+    loggedInUserId = JSON.parse(atob(token.split(".")[1])).id;
+  }
+
+  // ✅ Delete Review
+  const handleDelete = async (id) => {
+    await fetch(`http://localhost:5000/reviews/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    });
+    setTestimonials(testimonials.filter((r) => r._id !== id));
+  };
+
+  // ✅ Edit State
+  const [editingReview, setEditingReview] = useState(null);
+  const [editText, setEditText] = useState("");
+  const [editRating, setEditRating] = useState(5);
+
+  // ✅ Open Edit Modal
+  const handleEdit = (review) => {
+    setEditingReview(review);
+    setEditText(review.text);
+    setEditRating(review.rating);
+  };
+
+  // ✅ Save Changes
+  const handleSave = async () => {
+    const res = await fetch(`http://localhost:5000/reviews/${editingReview._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify({
+        text: editText,
+        rating: editRating,
+        name: editingReview.name,
+        location: editingReview.location,
+      })
+    });
+
+    const updated = await res.json();
+    setTestimonials(testimonials.map(r => (r._id === updated._id ? updated : r)));
+    setEditingReview(null);
+  };
 
   return (
     <>
-      {/* Background Section */}
       <section className="relative min-h-screen bg-[url('/landing/land.jpeg')] bg-cover bg-center text-white py-16 px-6">
-        {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/60"></div>
 
-        {/* Content */}
         <div className="relative z-10 max-w-6xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-heading mb-12">
             Guest Reviews 🌴
           </h1>
 
-          {/* Testimonials Grid */}
           <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((t, index) => (
+            {testimonials.map((t) => (
               <div
-                key={index}
+                key={t._id}
                 className="bg-white/10 hover:bg-white/20 transition-all p-6 rounded-2xl backdrop-blur-md shadow-lg border border-white/10 text-left"
               >
-                {/* Profile Info */}
+                {/* Profile */}
                 <div className="flex items-center mb-4">
                   <img
                     src={t.image}
@@ -73,21 +90,33 @@ export default function Testimonials() {
                   </div>
                 </div>
 
-                {/* Rating */}
+                {/* Stars */}
                 <div className="flex items-center mb-3">
-                  {[...Array(t.rating)].map((_, i) => (
+                  {[...Array(Number(t.rating))].map((_, i) => (
                     <FaStar key={i} className="text-yellow-400 mr-1" />
                   ))}
                 </div>
 
                 {/* Text */}
                 <p className="italic text-slate-100">{t.text}</p>
+
+                {/* ✅ Show Edit/Delete ONLY if user owns it */}
+                {String(t.userId) === loggedInUserId && (
+  <div className="flex justify-between mt-4 text-sm">
+    <button onClick={() => handleEdit(t)} className="text-blue-300 hover:text-blue-400 underline">
+      Edit
+    </button>
+    <button onClick={() => handleDelete(t._id)} className="text-red-300 hover:text-red-400 underline">
+      Delete
+    </button>
+  </div>
+)}
+
               </div>
             ))}
           </div>
         </div>
 
-        {/* ✅ Back to Home Button (inside background but above overlay) */}
         <div className="relative z-10 text-center mt-16">
           <Link
             to="/"
@@ -96,6 +125,49 @@ export default function Testimonials() {
             ← Back to Home
           </Link>
         </div>
+
+        {/* ✅ Edit Modal */}
+        {editingReview && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-[9999]">
+            <div className="bg-white text-gray-800 p-6 rounded-2xl w-96 shadow-xl animate-fadeIn">
+
+              <h2 className="text-xl font-semibold mb-3">Edit Review ✏️</h2>
+
+              <textarea
+                value={editText}
+                onChange={(e) => setEditText(e.target.value)}
+                className="w-full border rounded p-2 mb-4"
+              />
+
+              <label className="block font-medium mb-1">Rating ⭐</label>
+              <input
+                type="number"
+                min="1"
+                max="5"
+                value={editRating}
+                onChange={(e) => setEditRating(e.target.value)}
+                className="w-full border rounded p-2 mb-4"
+              />
+
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setEditingReview(null)}
+                  className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  onClick={handleSave}
+                  className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+                >
+                  Save ✅
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </section>
     </>
   );

@@ -1,11 +1,18 @@
 "use client";
 import { useState } from "react";
+<<<<<<< HEAD
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { auth, googleProvider } from "../firebaseConfig";
 import { signInWithPopup } from "firebase/auth";
+=======
+import { Link, useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebaseConfig.js";
+>>>>>>> 9eb7f07959a8affa24bbe4da891f187d0566a55b
 
 export default function Signin() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,17 +22,24 @@ export default function Signin() {
     setLoading(true);
 
     try {
+<<<<<<< HEAD
       // Direct backend authentication (no Firebase for email/password)
       const res = await axios.post("http://localhost:5000/api/auth/login", {
         email,
         password
       });
+=======
+      await signInWithEmailAndPassword(auth, email, password);
+>>>>>>> 9eb7f07959a8affa24bbe4da891f187d0566a55b
 
       alert("Login Successful ✅");
-      localStorage.setItem("token", res.data.token);
-      window.location.href = "/";
+      navigate("/packages"); // ✅ go directly
     } catch (error) {
+<<<<<<< HEAD
       alert(error.response?.data?.message || error.message || "Login failed ❌");
+=======
+      alert(error.message || "Login failed ❌");
+>>>>>>> 9eb7f07959a8affa24bbe4da891f187d0566a55b
       console.error(error);
     } finally {
       setLoading(false);
@@ -56,26 +70,17 @@ export default function Signin() {
   };
 
   return (
-    <div
-      className="relative flex items-center justify-center h-screen w-full bg-cover bg-center"
-      style={{
-        backgroundImage: "url('./signup.jpg')", // resort image background
-      }}
-    >
-      {/* soft white overlay for clarity */}
-      <div className="absolute inset-0 bg-white/40 "></div>
+    <div className="relative flex items-center justify-center h-screen w-full bg-cover bg-center"
+      style={{ backgroundImage: "url('./signup.jpg')" }}>
 
-      {/* animated gradient border wrapper */}
-      <div className="relative z-10 p-[2px] rounded-2xl bg-gradient-to-r from-amber-200 via-rose-100 to-emerald-200 animate-[borderFlow_10s_linear_infinite]">
-        <form
-          onSubmit={handleSignin}
-          className="relative z-10 md:w-96 w-80 flex flex-col items-center justify-center bg-white/70 backdrop-blur-md p-8 rounded-2xl shadow-xl"
-        >
+      <div className="absolute inset-0 bg-white/40"></div>
+
+      <div className="relative z-10 p-[2px] rounded-2xl bg-gradient-to-r from-amber-200 via-rose-100 to-emerald-200">
+        <form onSubmit={handleSignin} className="md:w-96 w-80 flex flex-col bg-white/70 p-8 rounded-2xl">
+          
           <h2 className="text-3xl font-semibold text-slate-800">Sign In</h2>
-          <p className="text-sm text-slate-500 mt-2">
-            Welcome back! Please sign in to continue
-          </p>
 
+<<<<<<< HEAD
           {/* Google Button */}
           <button
             type="button"
@@ -90,67 +95,30 @@ export default function Signin() {
             />
             <span className="text-sm text-slate-700">Sign in with Google</span>
           </button>
+=======
+          <input type="email" placeholder="Email" value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required className="mt-6 border rounded-full p-3" />
+>>>>>>> 9eb7f07959a8affa24bbe4da891f187d0566a55b
 
-          {/* Divider */}
-          <div className="flex items-center gap-4 w-full my-5 text-slate-500">
-            <div className="w-full h-px bg-slate-300"></div>
-            <p className="text-sm whitespace-nowrap">or sign in with email</p>
-            <div className="w-full h-px bg-slate-300"></div>
-          </div>
+          <input type="password" placeholder="Password" value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required className="mt-4 border rounded-full p-3" />
 
-          {/* Email */}
-          <div className="flex items-center w-full border border-slate-300 h-12 rounded-full pl-6 gap-2 bg-white/50 focus-within:border-amber-300 transition-all">
-            <input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              autoComplete="email"
-              onChange={(e) => setEmail(e.target.value)}
-              className="bg-transparent text-slate-700 placeholder-slate-400 outline-none text-sm w-full"
-              required
-            />
-          </div>
-
-          {/* Password */}
-          <div className="flex items-center mt-5 w-full border border-slate-300 h-12 rounded-full pl-6 gap-2 bg-white/50 focus-within:border-amber-300 transition-all">
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              autoComplete="current-password"
-              onChange={(e) => setPassword(e.target.value)}
-              className="bg-transparent text-slate-700 placeholder-slate-400 outline-none text-sm w-full"
-              required
-            />
-          </div>
-
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="mt-8 w-full h-11 rounded-full text-white font-semibold bg-gradient-to-r from-amber-400 to-rose-400 hover:from-amber-300 hover:to-rose-300 shadow-lg transition-all"
-          >
+          <button disabled={loading} type="submit"
+            className="mt-6 bg-indigo-600 text-white py-3 rounded-full">
             {loading ? "Signing in..." : "Login"}
           </button>
 
-          <p className="text-slate-600 text-sm mt-4">
-            Don’t have an account?{" "}
-            <Link className="text-amber-600 hover:underline" to="/signup">
-              Sign up
-            </Link>
+          <p className="text-sm mt-3">
+            No account? <Link to="/signup" className="text-indigo-500">Signup</Link>
           </p>
-           <div className="text-center mt-16">
-            <Link
-              to="/"
-              className="inline-block bg-amber-100/20 text-amber-400 border border-white/30 px-8 py-3 rounded-full hover:bg-amber-200/30 transition"
-            >
-              ← Back to Home
-            </Link>
-          </div>
+
+          <Link to="/" className="text-center mt-6 text-indigo-600">
+            ← Back to Home
+          </Link>
         </form>
-         
       </div>
-    
     </div>
   );
 }

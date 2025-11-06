@@ -28,7 +28,7 @@ export const register = async (req, res) => {
     await newUser.save();
     console.log("New user registered:", email);
 
-    return res.status(201).json({ message: "User registered successfully ✅" });
+    return res.status(201).json({ message: "Account created successfully ✅" });
 
   } catch (error) {
     console.error("REGISTER ERROR:", error);
@@ -59,9 +59,13 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials ❌" });
     }
+<<<<<<< HEAD
 
     console.log("User logged in:", email);
+=======
+>>>>>>> 9eb7f07959a8affa24bbe4da891f187d0566a55b
 
+    // ✅ Create JWT with User ID (used for ownership)
     const token = jwt.sign(
       { id: user._id, email: user.email },
       process.env.JWT_SECRET,
@@ -70,7 +74,7 @@ export const login = async (req, res) => {
 
     return res.status(200).json({
       message: "Login successful 🎉",
-      token,
+      token, // ✅ Send token to frontend
       user: {
         id: user._id,
         username: user.username,
