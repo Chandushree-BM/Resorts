@@ -1,12 +1,4 @@
 import express from "express";
-<<<<<<< HEAD
-import cors from "cors";
-import dotenv from "dotenv";
-import mongoose from "mongoose";
-
-import userRoutes from "./routes/userroutes.js";
-=======
->>>>>>> 9eb7f07959a8affa24bbe4da891f187d0566a55b
 import authRoutes from "./routes/auth.js";
 import packageRoutes from "./routes/packageRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
