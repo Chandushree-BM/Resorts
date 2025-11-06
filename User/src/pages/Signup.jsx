@@ -2,6 +2,8 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { auth, googleProvider } from "../firebaseConfig";
+import { signInWithPopup } from "firebase/auth";
 
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
@@ -17,15 +19,40 @@ export default function Signup() {
     setLoading(true);
 
     try {
+      // Register user directly in backend (no Firebase for email/password)
       await axios.post("http://localhost:5000/api/auth/register", {
         username,
         email,
-        password,
+        password
       });
+      
       alert("Signup Successful ✅");
       window.location.href = "/signin";
     } catch (err) {
-      alert(err.response?.data?.message || "Signup failed ❌");
+      alert(err.response?.data?.message || err.message || "Signup failed ❌");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    try {
+      setLoading(true);
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      // Send to backend to store in database
+      const res = await axios.post("http://localhost:5000/api/auth/google-auth", {
+        username: user.displayName,
+        email: user.email,
+        firebaseUid: user.uid
+      });
+
+      localStorage.setItem("token", res.data.token);
+      alert("Google Sign-in Successful ✅");
+      window.location.href = "/";
+    } catch (err) {
+      alert(err.response?.data?.message || err.message || "Google sign-in failed ❌");
     } finally {
       setLoading(false);
     }
@@ -55,7 +82,9 @@ export default function Signup() {
           {/* Google Button */}
           <button
             type="button"
-            className="w-full mt-8 bg-gradient-to-r from-amber-100 to-rose-100 border border-white/60 flex items-center justify-center h-12 rounded-full hover:scale-105 transition-all"
+            onClick={handleGoogleSignup}
+            disabled={loading}
+            className="w-full mt-8 bg-gradient-to-r from-amber-100 to-rose-100 border border-white/60 flex items-center justify-center h-12 rounded-full hover:scale-105 transition-all disabled:opacity-50"
           >
             <img
               src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/googleLogo.svg"
