@@ -1,8 +1,8 @@
+// Import required Firebase SDKs
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth";       // ✅ Add this
-import { getFirestore } from "firebase/firestore"; // (Optional) if you use Firestore
+import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -15,14 +15,14 @@ const firebaseConfig = {
   measurementId: "G-429H2NGMLG",
 };
 
+// ✅ Initialize Firebase only once
 const app = initializeApp(firebaseConfig);
+
+// ✅ Initialize all Firebase services
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
-const analytics = getAnalytics(app);
+export const db = getFirestore(app);
+export const analytics = getAnalytics(app);
 
-// ✅ Initialize services
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// ✅ Export what you need
-export { auth, db, analytics };
+// Export the app (optional)
+export default app;

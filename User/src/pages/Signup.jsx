@@ -1,9 +1,5 @@
 "use client";
 import { useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import { auth, googleProvider } from "../firebaseConfig";
-import { signInWithPopup } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebaseConfig.js";
@@ -23,13 +19,6 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      // Register user directly in backend (no Firebase for email/password)
-      await axios.post("http://localhost:5000/api/auth/register", {
-        username,
-        email,
-        password
-      });
-      
       // ✅ Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -38,32 +27,6 @@ export default function Signup() {
       await updateProfile(user, { displayName: username });
 
       alert("Signup Successful ✅");
-      window.location.href = "/signin";
-    } catch (err) {
-      alert(err.response?.data?.message || err.message || "Signup failed ❌");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogleSignup = async () => {
-    try {
-      setLoading(true);
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-
-      // Send to backend to store in database
-      const res = await axios.post("http://localhost:5000/api/auth/google-auth", {
-        username: user.displayName,
-        email: user.email,
-        firebaseUid: user.uid
-      });
-
-      localStorage.setItem("token", res.data.token);
-      alert("Google Sign-in Successful ✅");
-      window.location.href = "/";
-    } catch (err) {
-      alert(err.response?.data?.message || err.message || "Google sign-in failed ❌");
       navigate("/signin");
     } catch (error) {
       console.error(error);
@@ -97,9 +60,7 @@ export default function Signup() {
           {/* Google Button (non-functional placeholder for now) */}
           <button
             type="button"
-            onClick={handleGoogleSignup}
-            disabled={loading}
-            className="w-full mt-8 bg-gradient-to-r from-amber-100 to-rose-100 border border-white/60 flex items-center justify-center h-12 rounded-full hover:scale-105 transition-all disabled:opacity-50"
+            className="w-full mt-8 bg-gradient-to-r from-amber-100 to-rose-100 border border-white/60 flex items-center justify-center h-12 rounded-full hover:scale-105 transition-all"
           >
             <img
               src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/googleLogo.svg"
