@@ -6,7 +6,11 @@ import Signin from "./pages/Signin";
 import Testimonials from "./pages/Testimonials.jsx";
 import About from "./pages/About";
 import Contact from "./pages/Contact.jsx";
+<<<<<<< HEAD
 import AddReview from "./pages/AddReview.jsx";
+=======
+
+>>>>>>> 1748df4a116702741114635adf2b7809a24931ac
 export default function App() {
   return (
     <>
@@ -19,7 +23,14 @@ export default function App() {
         <Route path="/testimonials" element={<Testimonials />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+<<<<<<< HEAD
         <Route path="/add-review" element={<AddReview />} />
+=======
+<Route path="/booking" element={<BookingPage />} />
+        <Route path="/packages" element={<Packages />} />
+        <Route path="/packages/:id" element={<PackageDetails />} /> 
+
+>>>>>>> 1748df4a116702741114635adf2b7809a24931ac
       </Routes>
     </Router></>
   );
