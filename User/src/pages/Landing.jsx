@@ -1,11 +1,31 @@
 "use client";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { FaUserCircle } from "react-icons/fa";
+import { useState, useRef, useEffect } from "react";
 
 export default function Landing() {
-  return (
-    <>
-      <style>{`
+
+    const [showDropdown, setShowDropdown] = useState(false);
+    const dropdownRef = useRef(null);
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        window.location.href = "/signin";
+    };
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    return (
+        <>
+            <style>{`
 @import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Prata&display=swap');
 
 * {
@@ -63,33 +83,19 @@ export default function Landing() {
 }
 `}</style>
 
-      {/* 🌅 HERO SECTION */}
-      <section className="relative flex flex-col items-center pb-48 text-center text-sm text-white max-md:px-2 overflow-hidden">
-        <motion.div
-          className="absolute inset-0 parallax"
-          style={{
-            backgroundImage: "url('./landing/land0.jpeg')",
-            filter: "brightness(1.15) contrast(1.1) saturate(1.3)",
-          }}
-          initial={{ scale: 1 }}
-          animate={{ scale: 1.05 }}
-          transition={{ duration: 30, repeat: Infinity, repeatType: "mirror" }}
-        ></motion.div>
+            <section className="relative flex flex-col items-center pb-48 text-center text-sm text-white max-md:px-2 overflow-hidden">
 
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/70"></div>
+                <img src="./landing/land0.jpeg" alt="Resort Background" className="absolute inset-0 w-full h-full object-cover brightness-105 contrast-110 saturate-125" />
+                <div className="absolute inset-0 bg-black/35"></div>
 
-        {/* CONTENT */}
-        <div className="relative z-10 w-full flex flex-col items-center fade-in-up">
-          {/* NAVBAR */}
-          <motion.nav
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="flex justify-between items-center px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-white/10 w-full bg-white/10 backdrop-blur-md sticky top-0 z-20 shadow-sm"
-          >
-            <Link to="/" className="text-2xl font-heading tracking-wide text-white drop-shadow-lg">
-              EL-MARIO RESORT
-            </Link>
+                <div className="relative z-10 w-full flex flex-col items-center">
+
+                    {/* 🌊 Navigation Bar */}
+                    <nav className="flex justify-between items-center px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-white/20 w-full bg-black/30 backdrop-blur-sm">
+
+                        <a href="#" className="text-2xl font-berkshire tracking-wide text-white">
+                            EL-MARIO RESORT
+                        </a>
 
             <div className="hidden md:flex gap-6 text-white font-medium">
               {["Home", "About", "Packages", "Contact"].map((item, i) => (
@@ -105,31 +111,17 @@ export default function Landing() {
             </div>
           </motion.nav>
 
-          {/* Guests */}
-          <Link to="/testimonials">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="flex items-center justify-center p-1.5 mt-24 md:mt-28 rounded-full border border-slate-300 text-xs bg-black/40 backdrop-blur-sm cursor-pointer hover:scale-105 transition-all duration-300"
-            >
-              <div className="flex items-center">
-                {[
-                  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&q=80",
-                  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=50&q=80",
-                  "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=50&q=80",
-                ].map((img, i) => (
-                  <img
-                    key={i}
-                    className={`size-7 rounded-full border-2 border-white ${i > 0 ? `-translate-x-${i * 2}` : ""}`}
-                    src={img}
-                    alt={`guest${i + 1}`}
-                  />
-                ))}
-              </div>
-              <p className="-translate-x-2">Loved by 500+ guests worldwide</p>
-            </motion.div>
-          </Link>
+                    {/* Guests Section */}
+                    <Link to="/testimonials">
+                        <div className="flex flex-wrap items-center justify-center p-1.5 mt-24 md:mt-28 rounded-full border border-slate-300 text-xs bg-black/30 backdrop-blur-sm cursor-pointer transform transition-all hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                            <div className="flex items-center">
+                                <img className="size-7 rounded-full border-3 border-white" src="https://images.unsplash.com/photo-500648767791-00dcc994a43e?w=50&q=80" alt="guest1" />
+                                <img className="size-7 rounded-full border-3 border-white -translate-x-2" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=50&q=80" alt="guest2" />
+                                <img className="size-7 rounded-full border-3 border-white -translate-x-4" src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=50&q=80" alt="guest3" />
+                            </div>
+                            <p className="-translate-x-2">Trusted by happy guests of EL-MARIO</p>
+                        </div>
+                    </Link>
 
           {/* HERO TEXT */}
           <motion.h1
