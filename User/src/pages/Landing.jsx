@@ -70,9 +70,13 @@ export default function Landing() {
 >
   Contact
 </Link>
+<Link to="/add-review" className="hover:text-blue-400 bg-gray-200 text-slate-800 px-6 md:px-8 py-2.5 rounded-full font-medium transition">
+  Add Review
+</Link>
 
-                        </div>
-                    </nav>
+
+</div>
+</nav>
 
                     {/* Guests Section */}
                     {/* Guests Section */}
