@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getAnalytics } from "firebase/analytics";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDOMP3OtQ-ATZZkbyVL9L_sPopWsduY7XE",
   authDomain: "resort-45125.firebaseapp.com",
@@ -13,8 +13,5 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const analytics = getAnalytics(app);
-
-export { auth };
-export default app;
+export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();

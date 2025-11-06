@@ -7,6 +7,15 @@ import Testimonials from "./pages/Testimonials.jsx";
 import About from "./pages/About";
 import Contact from "./pages/Contact.jsx";
 <<<<<<< HEAD
+import Profile from "./pages/Profile";
+
+
+
+export default function App() {
+  return (
+    
+=======
+<<<<<<< HEAD
 import AddReview from "./pages/AddReview.jsx";
 =======
 
@@ -15,11 +24,13 @@ export default function App() {
   return (
     <>
     <Toaster position="top-center" />
+>>>>>>> 9eb7f07959a8affa24bbe4da891f187d0566a55b
     <Router>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/testimonials" element={<Testimonials />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />

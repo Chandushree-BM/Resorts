@@ -1,5 +1,40 @@
 "use client";
 import { Link } from "react-router-dom";
+<<<<<<< HEAD
+import { FaUserCircle } from "react-icons/fa";
+import { useState, useRef, useEffect } from "react";
+
+export default function Landing() {
+
+    const [showDropdown, setShowDropdown] = useState(false);
+    const dropdownRef = useRef(null);
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        window.location.href = "/signin";
+    };
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    return (
+        <>
+            <style>{`
+@import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Prata&display=swap');
+
+* { font-family: 'Tenor Sans', sans-serif; }
+.font-heading { font-family: 'Prata', serif; font-weight: 400; letter-spacing: 0.6px; }
+`}</style>
+
+            <section className="relative flex flex-col items-center pb-48 text-center text-sm text-white max-md:px-2 overflow-hidden">
+=======
 import { motion } from "framer-motion";
 
 export default function Landing() {
@@ -228,36 +263,49 @@ export default function Landing() {
                   className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700"
                 />
 <<<<<<< HEAD
+>>>>>>> 9eb7f07959a8affa24bbe4da891f187d0566a55b
 
-                {/* Overlay for readability */}
+                <img src="./landing/land0.jpeg" alt="Resort Background" className="absolute inset-0 w-full h-full object-cover brightness-105 contrast-110 saturate-125" />
                 <div className="absolute inset-0 bg-black/35"></div>
 
-                {/* Content Wrapper */}
                 <div className="relative z-10 w-full flex flex-col items-center">
 
                     {/* 🌊 Navigation Bar */}
                     <nav className="flex justify-between items-center px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-white/20 w-full bg-black/30 backdrop-blur-sm">
-                        
-                        {/* Logo / Resort Name */}
+
                         <a href="#" className="text-2xl font-berkshire tracking-wide text-white">
                             EL-MARIO RESORT
                         </a>
 
-                        {/* Navbar Links */}
-                        <div className="hidden md:flex gap-6 text-white font-medium">
-                            <a 
-                                href="#"
-                                className="bg-gray-200 text-slate-800 px-6 py-2.5 rounded-full transition hover:bg-white hover:text-blue-600"
-                            >
-                                Home
-                            </a>
-                           <Link
-                            to="/about"
-                        className="bg-gray-200 text-slate-800 px-6 md:px-8 py-2.5 rounded-full font-medium
-                         transition hover:bg-white hover:text-blue-600">
-                                                  About
-</Link>
+                        <div className="hidden md:flex gap-6 items-center text-white font-medium">
 
+<<<<<<< HEAD
+                            <a href="#" className="bg-gray-200 text-slate-800 px-6 py-2.5 rounded-full transition hover:bg-white hover:text-blue-600">Home</a>
+
+                            <Link to="/about" className="bg-gray-200 text-slate-800 px-6 py-2.5 rounded-full transition hover:bg-white hover:text-blue-600">About</Link>
+
+                            <a href="#packages" className="bg-gray-200 text-slate-800 px-6 py-2.5 rounded-full transition hover:bg-white hover:text-blue-600">Packages</a>
+
+                            <Link to="/contact" className="bg-gray-200 text-slate-800 px-6 py-2.5 rounded-full transition hover:bg-white hover:text-blue-600">Contact</Link>
+
+                            {/* ✅ Profile Dropdown */}
+                            <div className="relative" ref={dropdownRef}>
+                                <button
+                                    onClick={() => setShowDropdown(!showDropdown)}
+                                    className="flex items-center gap-2 bg-white/80 text-slate-900 px-4 py-2 rounded-full hover:bg-white transition"
+                                >
+                                    <FaUserCircle size={22} />
+                                    <span className="hidden md:block">Profile</span>
+                                </button>
+
+                                {showDropdown && (
+                                    <div className="absolute right-0 mt-2 w-40 bg-white text-slate-800 rounded-lg shadow-lg border border-gray-200 overflow-hidden">
+                                        <Link to="/profile" className="block px-4 py-2 hover:bg-gray-200">View Profile</Link>
+                                        <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-red-200 hover:text-red-700">Logout</button>
+                                    </div>
+                                )}
+                            </div>
+=======
                             <a 
                                 href="#packages"
                                 className="bg-gray-200 text-slate-800 px-6 py-2.5 rounded-full transition hover:bg-white hover:text-blue-600"
@@ -273,45 +321,30 @@ export default function Landing() {
 <Link to="/add-review" className="hover:text-blue-400 bg-gray-200 text-slate-800 px-6 md:px-8 py-2.5 rounded-full font-medium transition">
   Add Review
 </Link>
+>>>>>>> 9eb7f07959a8affa24bbe4da891f187d0566a55b
 
 
 </div>
 </nav>
 
                     {/* Guests Section */}
-                    {/* Guests Section */}
-<Link to="/testimonials">
-  <div className="flex flex-wrap items-center justify-center p-1.5 mt-24 md:mt-28 rounded-full border border-slate-300 text-xs bg-black/30 backdrop-blur-sm cursor-pointer transform transition-all hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-      <div className="flex items-center">
-          <img
-              className="size-7 rounded-full border-3 border-white"
-              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&q=80"
-              alt="guest1"
-          />
-          <img
-              className="size-7 rounded-full border-3 border-white -translate-x-2"
-              src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=50&q=80"
-              alt="guest2"
-          />
-          <img
-              className="size-7 rounded-full border-3 border-white -translate-x-4"
-              src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=50&q=80"
-              alt="guest3"
-          />
-      </div>
-      <p className="-translate-x-2">Trusted by happy guests of EL-MARIO</p>
-  </div>
-</Link>
+                    <Link to="/testimonials">
+                        <div className="flex flex-wrap items-center justify-center p-1.5 mt-24 md:mt-28 rounded-full border border-slate-300 text-xs bg-black/30 backdrop-blur-sm cursor-pointer transform transition-all hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                            <div className="flex items-center">
+                                <img className="size-7 rounded-full border-3 border-white" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&q=80" alt="guest1" />
+                                <img className="size-7 rounded-full border-3 border-white -translate-x-2" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=50&q=80" alt="guest2" />
+                                <img className="size-7 rounded-full border-3 border-white -translate-x-4" src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=50&q=80" alt="guest3" />
+                            </div>
+                            <p className="-translate-x-2">Trusted by happy guests of EL-MARIO</p>
+                        </div>
+                    </Link>
 
-
-                    {/* Hero Title */}
                     <h1 className="font-berkshire text-[45px]/[52px] md:text-6xl/[65px] mt-6 max-w-4xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
-                        Experience Paradise at <br></br> EL-MARIO RESORT.
+                        Experience Paradise at <br /> EL-MARIO RESORT.
                     </h1>
 
-                    {/* Subtext */}
                     <p className="text-base mt-2 max-w-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
-                        Escape to tranquility where luxury meets nature. 
+                        Escape to tranquility where luxury meets nature.
                         Unwind in beachfront villas, savor fine cuisine, and embrace serenity.
                     </p>
 
@@ -321,13 +354,7 @@ export default function Landing() {
 
                     <br />
 
-                   <Link
-                    to="/signup"
-                    className="bg-white text-slate-800 hover:bg-blue-500 hover:text-white px-6 md:px-8 py-2.5 rounded-full font-medium transition"
-                                        >Book Now
-                                
-                                
-                        </Link>
+                    <Link to="/signup" className="bg-white text-slate-800 hover:bg-blue-500 hover:text-white px-6 py-2.5 rounded-full font-medium transition">Book Now</Link>
 
 =======
                 <div className="p-6 text-left">
@@ -338,6 +365,11 @@ export default function Landing() {
                   </Link>
 >>>>>>> 1748df4a116702741114635adf2b7809a24931ac
                 </div>
+<<<<<<< HEAD
+            </section>
+        </>
+    );
+=======
               </motion.div>
             ))}
           </div>
@@ -356,4 +388,5 @@ export default function Landing() {
       </footer>
     </>
   );
+>>>>>>> 9eb7f07959a8affa24bbe4da891f187d0566a55b
 }
