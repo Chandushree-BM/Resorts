@@ -5,6 +5,9 @@ import Signin from "./pages/Signin";
 import Testimonials from "./pages/Testimonials.jsx";
 import About from "./pages/About";
 import Contact from "./pages/Contact.jsx";
+import BookingPage from "./pages/BookingPage.jsx"
+import Packages from "./pages/Packages.jsx"
+import PackagesDetalis from "./pages/PackageDetails.jsx"
 
 export default function App() {
   return (
@@ -18,7 +21,7 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
 <Route path="/booking" element={<BookingPage />} />
         <Route path="/packages" element={<Packages />} />
-        <Route path="/packages/:id" element={<PackageDetails />} /> 
+        <Route path="/packages/:id" element={<PackagesDetalis />} /> 
 
       </Routes>
     </Router>

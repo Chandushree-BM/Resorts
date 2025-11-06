@@ -1,12 +1,14 @@
 "use client";
 import { useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../firebaseConfig.js";
 
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 
 export default function Signup() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,15 +19,18 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:5000/api/auth/register", {
-        username,
-        email,
-        password,
-      });
+      // ✅ Create user in Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // ✅ Optionally update user display name
+      await updateProfile(user, { displayName: username });
+
       alert("Signup Successful ✅");
-      window.location.href = "/signin";
-    } catch (err) {
-      alert(err.response?.data?.message || "Signup failed ❌");
+      navigate("/signin");
+    } catch (error) {
+      console.error(error);
+      alert(error.message || "Signup failed ❌");
     } finally {
       setLoading(false);
     }
@@ -38,10 +43,10 @@ export default function Signup() {
         backgroundImage: "url('./signup.jpg')", // Resort image
       }}
     >
-      {/* Soft light overlay for better contrast */}
-      <div className="absolute inset-0 bg-white/40 "></div>
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-white/40"></div>
 
-      {/* Outer animated gradient border */}
+      {/* Gradient Border Container */}
       <div className="relative z-10 p-[2px] rounded-2xl bg-gradient-to-r from-amber-200 via-rose-100 to-emerald-200 animate-[borderFlow_10s_linear_infinite]">
         <form
           onSubmit={handleSignup}
@@ -52,7 +57,7 @@ export default function Signup() {
             Create your account to continue
           </p>
 
-          {/* Google Button */}
+          {/* Google Button (non-functional placeholder for now) */}
           <button
             type="button"
             className="w-full mt-8 bg-gradient-to-r from-amber-100 to-rose-100 border border-white/60 flex items-center justify-center h-12 rounded-full hover:scale-105 transition-all"
@@ -111,7 +116,7 @@ export default function Signup() {
             />
           </div>
 
-          {/* Submit */}
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -119,13 +124,17 @@ export default function Signup() {
           >
             {loading ? "Registering..." : "Register"}
           </button>
-            <p className="text-sm text-center mt-4 text-amber">
-  Already have an account?{" "}
-  <Link to="/signin" className="text-blue-400 hover:text-blue-600 font-medium">
-    Sign in
-  </Link>
-</p>
-<div className="text-center mt-16">
+
+          {/* Signin Link */}
+          <p className="text-sm text-center mt-4 text-slate-600">
+            Already have an account?{" "}
+            <Link to="/signin" className="text-blue-400 hover:text-blue-600 font-medium">
+              Sign in
+            </Link>
+          </p>
+
+          {/* Back to Home */}
+          <div className="text-center mt-16">
             <Link
               to="/"
               className="inline-block bg-amber-100/20 text-amber-400 border border-white/30 px-8 py-3 rounded-full hover:bg-amber-200/30 transition"
@@ -133,8 +142,6 @@ export default function Signup() {
               ← Back to Home
             </Link>
           </div>
-
-          
         </form>
       </div>
     </div>

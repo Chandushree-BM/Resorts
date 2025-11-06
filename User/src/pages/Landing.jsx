@@ -19,7 +19,7 @@ export default function Landing() {
   letter-spacing: 0.6px;
 }
 
-/* Smooth fade animations */
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
@@ -35,13 +35,13 @@ export default function Landing() {
   background-position: center;
 }
 
-/* Shine gradient animation for button */
+
 @keyframes shine {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
 
-/* Gentle wave divider effect */
+
 .wave-divider {
   position: relative;
   height: 80px;
@@ -96,7 +96,7 @@ export default function Landing() {
                 <Link
                   key={i}
                   to={`/${item.toLowerCase()}`}
-                  className="hover:text-[#1aecff] transition duration-200 relative group"
+                  className="hover:text-[#1CC6E8] transition duration-200 relative group"
                 >
                   {item}
                   <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#1CC6E8] group-hover:w-full transition-all duration-300"></span>
@@ -162,8 +162,8 @@ export default function Landing() {
                 backgroundImage: "linear-gradient(90deg, #48D6E0, #00AEDD, #1CC6E8, #009DC5)",
                 backgroundSize: "200% auto",
                 animation: "shine 3s linear infinite",
-              }} >
-            
+              }}
+            >
               Book Your Stay
             </Link>
           </motion.div>
