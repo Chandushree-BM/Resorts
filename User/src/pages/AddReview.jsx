@@ -1,5 +1,4 @@
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 export default function AddReview() {
@@ -19,11 +18,9 @@ export default function AddReview() {
 
     const token = localStorage.getItem("token");
     if (!token) {
-      toast.error("Please sign in to add a review ❗");
+      alert("Please sign in to add a review ❗");
       return navigate("/signin");
     }
-
-    const loadingToast = toast.loading("Uploading your review...");
 
     try {
       const data = new FormData();
@@ -41,14 +38,11 @@ export default function AddReview() {
 
       if (!res.ok) throw new Error("Upload failed");
 
-      toast.dismiss(loadingToast);
-      toast.success("✅ Review Added Successfully!");
-
+      alert("✅ Review Added Successfully!");
       navigate("/testimonials");
 
     } catch (error) {
-      toast.dismiss(loadingToast);
-      toast.error("Upload failed ❌");
+      alert("Upload failed ❌");
       console.error(error);
     }
   };
