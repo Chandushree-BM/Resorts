@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import cloudinary from "../Config/Cloudinary.js";
 
 // Get Profile
 export const getProfile = async (req, res) => {
@@ -30,9 +31,31 @@ export const updateProfile = async (req, res) => {
     console.log("Updating profile for user ID:", userId);
     console.log("New data:", { username, email });
 
+    const updateData = { username, email };
+
+    // If an image file is uploaded, push it to Cloudinary and store URL
+    if (req.file) {
+      try {
+        const uploadResult = await new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "avatars" },
+            (err, result) => {
+              if (err) return reject(err);
+              resolve(result);
+            }
+          );
+          stream.end(req.file.buffer);
+        });
+        updateData.profilePic = uploadResult.secure_url;
+      } catch (uploadErr) {
+        console.error("Error uploading profile image:", uploadErr);
+        return res.status(500).json({ message: "Image upload failed", error: uploadErr.message });
+      }
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { username, email },
+      updateData,
       { new: true }
     ).select("-password");
 

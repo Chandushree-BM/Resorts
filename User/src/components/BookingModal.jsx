@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 export default function BookingModal({ pkg, onClose }) {
   const [checkIn, setCheckIn] = useState("");
@@ -17,15 +18,15 @@ export default function BookingModal({ pkg, onClose }) {
 
   const handleBook = async (e) => {
     e.preventDefault();
-    if (!checkIn || !checkOut) return alert("Select dates");
-    if (new Date(checkOut) <= new Date(checkIn)) return alert("Check-out must be after check-in");
+    if (!checkIn || !checkOut) return toast.error("Select dates");
+    if (new Date(checkOut) <= new Date(checkIn)) return toast.error("Check-out must be after check-in");
 
     setLoading(true);
 
     try {
       // Optional: availability check
       // const avail = await axios.get(`/api/packages/${pkg.id}/availability?from=${checkIn}&to=${checkOut}`);
-      // if (!avail.data.available) return alert("Not available for these dates");
+      // if (!avail.data.available) return toast.error("Not available for these dates");
 
       const payload = {
         packageId: pkg.id,
@@ -40,11 +41,11 @@ export default function BookingModal({ pkg, onClose }) {
       // call backend booking API (implement in Phase 2)
       await axios.post("http://localhost:5000/api/bookings", payload);
 
-      alert("Booking confirmed! We sent a confirmation.");
+      toast.success("Booking confirmed! We sent a confirmation.");
       onClose();
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Booking failed");
+      toast.error(err.response?.data?.message || "Booking failed");
     } finally {
       setLoading(false);
     }

@@ -7,6 +7,7 @@ import cloudinary from "./Config/Cloudinary.js";
 import Review from "./models/Review.js";
 import authRoutes from "./routes/auth.js";      // ✅ Correct auth routes file
 import auth from "./middlewares/auth.js";       // ✅ Token verification middleware
+import userRoutes from "./routes/userroutes.js";
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ app.use(express.json());
 
 // ✅ Auth (Signup & Login)
 app.use("/api/auth", authRoutes);
+// ✅ User Profile routes
+app.use("/api/user", userRoutes);
 
 // ✅ Multer for file upload
 const upload = multer({ storage: multer.memoryStorage() });

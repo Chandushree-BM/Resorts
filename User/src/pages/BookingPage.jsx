@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
 
 const BookingPage = () => {
@@ -42,11 +43,11 @@ const BookingPage = () => {
       });
 
       const data = await res.json();
-      alert("Booking Successful 🥳");
+      toast.success("Booking Successful 🥳");
       console.log(data);
     } catch (error) {
       console.log("Booking failed:", error);
-      alert("Booking Failed 😭 Try Again!");
+      toast.error("Booking Failed 😭 Try Again!");
     }
   };
 

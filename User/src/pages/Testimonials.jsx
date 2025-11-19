@@ -6,10 +6,44 @@ export default function Testimonials() {
   const [testimonials, setTestimonials] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/reviews")
-      .then(res => res.json())
-      .then(data => setTestimonials(data))
-      .catch(err => console.log(err));
+    const loadAllApproved = async () => {
+      try {
+        // get all packages
+        const pkRes = await fetch("http://localhost:5000/api/packages");
+        const pkgs = await pkRes.json();
+        if (!Array.isArray(pkgs)) return setTestimonials([]);
+
+        // fetch approved reviews for each package
+        const arrays = await Promise.all(
+          pkgs.map(async (p) => {
+            try {
+              const r = await fetch(`http://localhost:5000/api/reviews/package/${p._id}`);
+              const data = await r.json();
+              const list = Array.isArray(data.reviews) ? data.reviews : [];
+              // map to UI-friendly structure
+              return list.map((rev) => ({
+                _id: rev._id,
+                name: rev.userId?.username || "Guest",
+                location: p.location || p.name || "",
+                image: rev.userId?.profilePic || `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(rev.userId?.username || 'Guest')}`,
+                rating: rev.rating,
+                text: rev.comment,
+                userId: String(rev.userId?._id || rev.userId || ""),
+              }));
+            } catch {
+              return [];
+            }
+          })
+        );
+
+        const flat = arrays.flat().sort((a, b) => (a._id > b._id ? -1 : 1));
+        setTestimonials(flat);
+      } catch (e) {
+        console.log(e);
+        setTestimonials([]);
+      }
+    };
+    loadAllApproved();
   }, []);
 
   // ✅ Logged-in user ID
@@ -21,7 +55,7 @@ export default function Testimonials() {
 
   // ✅ Delete Review
   const handleDelete = async (id) => {
-    await fetch(`http://localhost:5000/reviews/${id}`, {
+    await fetch(`http://localhost:5000/api/reviews/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     });
@@ -42,22 +76,24 @@ export default function Testimonials() {
 
   // ✅ Save Changes
   const handleSave = async () => {
-    const res = await fetch(`http://localhost:5000/reviews/${editingReview._id}`, {
+    const res = await fetch(`http://localhost:5000/api/reviews/${editingReview._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`
       },
       body: JSON.stringify({
-        text: editText,
-        rating: editRating,
-        name: editingReview.name,
-        location: editingReview.location,
+        comment: editText,
+        rating: Number(editRating)
       })
     });
 
     const updated = await res.json();
-    setTestimonials(testimonials.map(r => (r._id === updated._id ? updated : r)));
+    setTestimonials(testimonials.map(r => (r._id === updated.review?._id || updated._id ? (r._id === (updated.review?._id || updated._id) ? {
+      ...r,
+      text: updated.review?.comment || updated.comment || editText,
+      rating: updated.review?.rating || updated.rating || editRating
+    } : r) : r)));
     setEditingReview(null);
   };
 
@@ -71,14 +107,14 @@ export default function Testimonials() {
             Guest Reviews 🌴
           </h1>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 md:gap-12 mt-12">
             {testimonials.map((t) => (
               <div
                 key={t._id}
-                className="bg-white/10 hover:bg-white/20 transition-all p-6 rounded-2xl backdrop-blur-md shadow-lg border border-white/10 text-left"
+                className="bg-white/10 hover:bg-white/20 transition-all p-7 rounded-2xl backdrop-blur-md shadow-lg border border-white/10 text-left space-y-5"
               >
                 {/* Profile */}
-                <div className="flex items-center mb-4">
+                <div className="flex items-center mb-5">
                   <img
                     src={t.image}
                     alt={t.name}
@@ -91,7 +127,7 @@ export default function Testimonials() {
                 </div>
 
                 {/* Stars */}
-                <div className="flex items-center mb-3">
+                <div className="flex items-center mb-4">
                   {[...Array(Number(t.rating))].map((_, i) => (
                     <FaStar key={i} className="text-yellow-400 mr-1" />
                   ))}

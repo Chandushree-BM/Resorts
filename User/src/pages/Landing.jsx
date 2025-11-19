@@ -77,6 +77,7 @@ export default function Landing() {
         ></motion.div>
 
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/70"></div>
+ 
 
         {/* CONTENT */}
         <div className="relative z-10 w-full flex flex-col items-center fade-in-up">
@@ -246,8 +247,8 @@ export default function Landing() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#48D6E0]/90 via-[#1CC6E8]/85 to-[#009DC5]/90"></div>
 
         <div className="relative z-10 drop-shadow-md">
-          <p>© 2025 EL-MARIO RESORT. All rights reserved.</p>
-          <p className="mt-2 text-sm text-blue-50">Designed with ❤️ by EL-MARIO Web Team</p>
+          <p> 2025 EL-MARIO RESORT. All rights reserved.</p>
+          <p className="mt-2 text-sm text-blue-50">Designed with by EL-MARIO Web Team</p>
         </div>
       </footer>
     </>

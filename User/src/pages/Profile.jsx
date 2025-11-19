@@ -2,6 +2,7 @@ import { FaUserCircle, FaEdit, FaSave, FaTimes, FaEnvelope, FaUser, FaCalendar }
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 export default function Profile() {
   const [user, setUser] = useState({});
@@ -11,6 +12,8 @@ export default function Profile() {
   const [editUsername, setEditUsername] = useState("");
   const [editEmail, setEditEmail] = useState("");
   const [saving, setSaving] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -48,26 +51,38 @@ export default function Profile() {
   const handleCancel = () => {
     setEditUsername(user.username || "");
     setEditEmail(user.email || "");
+    setSelectedFile(null);
+    setPreviewUrl("");
     setIsEditing(false);
   };
 
   const handleSave = async () => {
     setSaving(true);
     try {
-      const res = await axios.put("http://localhost:5000/api/user/profile", {
-        username: editUsername,
-        email: editEmail
-      }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
+      const form = new FormData();
+      form.append("username", editUsername);
+      form.append("email", editEmail);
+      if (selectedFile) form.append("profilePic", selectedFile);
+
+      const res = await axios.put(
+        "http://localhost:5000/api/user/profile",
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       
       setUser(res.data);
       setEditUsername(res.data.username || "");
       setEditEmail(res.data.email || "");
+      setSelectedFile(null);
+      setPreviewUrl("");
       setIsEditing(false);
-      alert("Profile updated successfully! ✅");
+      toast.success("Profile updated successfully! ✅");
     } catch (err) {
-      alert("Error updating profile: " + (err.response?.data?.message || err.message));
+      toast.error("Error updating profile: " + (err.response?.data?.message || err.message));
     } finally {
       setSaving(false);
     }
@@ -121,8 +136,14 @@ export default function Profile() {
               {/* Profile Picture */}
               <div className="flex justify-center -mt-16 mb-4">
                 <div className="relative">
-                  <div className="w-32 h-32 rounded-full border-4 border-white shadow-xl bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
-                    <FaUserCircle size={120} className="text-white" />
+                  <div className="w-32 h-32 rounded-full border-4 border-white shadow-xl bg-gray-100 overflow-hidden flex items-center justify-center">
+                    {previewUrl ? (
+                      <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                    ) : user.profilePic ? (
+                      <img src={user.profilePic} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <FaUserCircle size={120} className="text-gray-300" />
+                    )}
                   </div>
                   {!isEditing && (
                     <button
@@ -210,6 +231,24 @@ export default function Profile() {
                   <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Edit Your Profile</h2>
                   
                   <div className="max-w-md mx-auto space-y-6">
+                    {/* Profile Image Input */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Profile Image</label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          setSelectedFile(file);
+                          const url = URL.createObjectURL(file);
+                          setPreviewUrl(url);
+                        }}
+                        className="w-full text-sm"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">PNG, JPG up to ~5MB.</p>
+                    </div>
+
                     {/* Username Input */}
                     <div>
                       <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">

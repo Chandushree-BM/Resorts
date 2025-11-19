@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 export default function EditProfile() {
   const [username, setUsername] = useState("");
@@ -25,7 +26,7 @@ export default function EditProfile() {
       setLoading(false);
     }).catch(err => {
       console.error("Error fetching profile:", err);
-      alert("Failed to load profile data");
+      toast.error("Failed to load profile data");
       setLoading(false);
       if (err.response?.status === 401) {
         localStorage.clear();
@@ -43,10 +44,10 @@ export default function EditProfile() {
       }, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
-      alert("Profile updated successfully!");
+      toast.success("Profile updated successfully!");
       window.location.href = "/profile";
     } catch (err) {
-      alert("Error updating profile: " + (err.response?.data?.message || err.message));
+      toast.error("Error updating profile: " + (err.response?.data?.message || err.message));
       setSaving(false);
     }
   };

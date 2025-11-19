@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 // ✅ Register Controller (Direct Email/Password - No Firebase)
 export const register = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, phone, role } = req.body;
 
     if (!username || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
@@ -22,11 +22,13 @@ export const register = async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      phone: phone || undefined,
+      role: role || 'user', // Accept role from request, default to 'user'
       authProvider: 'email'
     });
 
     await newUser.save();
-    console.log("New user registered:", email);
+    console.log("New user registered:", email, "- Role:", newUser.role);
 
     return res.status(201).json({ message: "User registered successfully ✅" });
 
@@ -75,6 +77,7 @@ export const login = async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role // Include role in response
       }
     });
 

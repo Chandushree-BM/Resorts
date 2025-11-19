@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { auth, googleProvider } from "../firebaseConfig";
@@ -21,11 +22,11 @@ export default function Signin() {
         password
       });
 
-      alert("Login Successful ✅");
+      toast.success("Login Successful ✅");
       localStorage.setItem("token", res.data.token);
       window.location.href = "/";
     } catch (error) {
-      alert(error.response?.data?.message || error.message || "Login failed ❌");
+      toast.error(error.response?.data?.message || error.message || "Login failed ❌");
       console.error(error);
     } finally {
       setLoading(false);
@@ -46,10 +47,10 @@ export default function Signin() {
       });
 
       localStorage.setItem("token", res.data.token);
-      alert("Google Sign-in Successful ✅");
+      toast.success("Google Sign-in Successful ✅");
       window.location.href = "/";
     } catch (err) {
-      alert(err.response?.data?.message || err.message || "Google sign-in failed ❌");
+      toast.error(err.response?.data?.message || err.message || "Google sign-in failed ❌");
     } finally {
       setLoading(false);
     }
